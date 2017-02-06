@@ -9,14 +9,21 @@ API_SECRET = "shh"
 app        = Flask(__name__)
 
 ###########################################################################
+''' Human user URLS '''
 
 @app.route("/")
 @app.route("/index")
+@app.route("/index.htm")
 @app.route("/index.html")
 def index():
-    template = "<!DOCTYPE html><html><body><h1>Assassin</h1><p>Server not implemented yet.</p></body></html>"
-    #return render_template('index.html')
-    return template
+    return render_template('index.html')
+
+###########################################################################
+''' Android app URLs '''
+
+@app.route("/api/stuff", methods=["POST"])
+def stuff():
+    return ""
 
 ###########################################################################
 if __name__ == '__main__':
