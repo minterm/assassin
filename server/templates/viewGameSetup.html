@@ -1,0 +1,17 @@
+<! Written by Micah Cliffe>
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>View Game</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>View Game</h1>
+    <p>Enter the ID of the game to view.</p>
+    <form action="view">
+        Game ID: <input type="text" name="g_id" value="###"><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

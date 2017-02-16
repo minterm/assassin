@@ -2,18 +2,27 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-<title>Android Assassin</title>
+    <title>Android Assassin</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h1>Overview</h1>
-<p>Assassin is a classic game as described <a href="https://en.wikipedia.org/wiki/Assassin_(game)">here</a>...</p>
+<div align="center">
+    <h1>Assassin</h1>
+    <p>Assassin is a classic game as described <a href="https://en.wikipedia.org/wiki/Assassin_(game)">here</a>...</p>
 
-<h1>Adaptations</h1>
-<p>NFC, Wi-Fi, GPS, cellular networks ...</p>
+    <h2>Adaptations</h2>
+    <p>NFC, Wi-Fi, GPS, cellular networks ...</p>
+</div>
 
-<h1>Play!</h1>
-<p>Connect to a current game or create a new game.</p>
+<div align="center">
+    <h1>Play!</h1>
+    <p>Connect to a current game or create a new game.</p>
+    <div>
+        <a href="/new"><button>New Game</button></a>
+        <a href="/view"><button>View Game</button></a>
+    </div>
+</div>
 
 </body>
 </html>

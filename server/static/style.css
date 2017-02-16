@@ -1,0 +1,38 @@
+body {
+    background-color: #25383C;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+}
+h2 {
+    color: white;
+    text-align: center;
+}
+
+p {
+    color: white;
+    font-family: "Westwood LET", serif;
+    font-size: 20px;
+}
+
+/* unvisited link */
+a:link {
+    color: aquamarine;
+}
+
+/* visited link */
+a:visited {
+    color: aqua;
+}
+
+/* mouse over link */
+a:hover {
+    color: cyan;
+}
+
+/* selected link */
+a:active {
+    color: cyan;
+}
