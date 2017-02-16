@@ -1,19 +1,12 @@
 body {
     background-color: #25383C;
-}
-
-h1 {
+    cursor: url(http://crouton.net/crouton.png), auto;
     color: white;
-    text-align: center;
-}
-h2 {
-    color: white;
+    font-family: "Westwood LET", serif;
     text-align: center;
 }
 
 p {
-    color: white;
-    font-family: "Westwood LET", serif;
     font-size: 20px;
 }
 

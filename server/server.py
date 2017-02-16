@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Assassin API for Assassin Android application
 # CS m117, Winter 2017
 # Team: Micah Cliffe, Christine Nguyen, Andrew Arifin, Nick Adair

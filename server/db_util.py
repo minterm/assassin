@@ -15,7 +15,8 @@ PASSWORD = 'assassin'
 DATABASE = 'Assassin'
 
 def query(query, args=()):
-    rv = None
+    rv  = None
+    con = None
     try:
         con = mdb.connect(HOST, USERNAME, PASSWORD, DATABASE);
         cur = con.cursor()
@@ -41,3 +42,7 @@ def execute(command, args=()):
         if con:    
             con.close()
     return completed
+
+###############################################################################
+if __name__ == "__main__":
+    print query("SELECT VERSION()")
