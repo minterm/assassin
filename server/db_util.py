@@ -46,3 +46,15 @@ def execute(command, args=()):
 ###############################################################################
 if __name__ == "__main__":
     print query("SELECT VERSION()")
+    print query("SHOW TABLES")
+    table_name = "exampleGame"
+    col1 = "p_id INT(11) NOT NULL AUTOINCREMENT"
+    col2 = "p_name VARCHAR(45) DEFAULT NULL"
+    col3 = "alive INT(1) DEFAULT 1"
+    col4 = "location TEXT DEFAULT NULL"
+    prim = "PRIMARY KEY(p_id)"
+    cmd  = "CREATE TABLE IF NOT EXISTS " + table_name + "("
+    cmd += col1 + ", " + col2 + ", " + col3 + ", " + col4 + ", "
+    cmd += prim + ") engine=InnoDB"
+    print execute(cmd)
+    print query("SHOW TABLES")

@@ -7,6 +7,7 @@
 # Primary maintainer: Micah Cliffe <micah.cliffe@ucla.edu>
 
 from flask import Flask, json, render_template, request, Response
+import db_util as db
 
 API_SECRET = "shh"
 app        = Flask(__name__)
