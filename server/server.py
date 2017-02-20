@@ -6,7 +6,7 @@
 # Team: Micah Cliffe, Christine Nguyen, Andrew Arifin, Nick Adair
 # Primary maintainer: Micah Cliffe <micah.cliffe@ucla.edu>
 
-from flask import Flask, json, render_template, request, Response
+from flask import Flask, jsonify, render_template, request, Response
 import db_util as db
 
 API_SECRET = "shh"
@@ -41,10 +41,19 @@ def viewGame():
 ###########################################################################
 
 # GetInfo
-@app.route("/api/info/<player>", methods=["GET"])
-def info(player):
-    # return info for player by checking database
-    pass
+@app.route("/api/info", methods=["GET"])
+def info():
+    g_id   = request.args.get("g_id")
+    p_name = request.args.get("p_name")
+    resp   = None
+    if g_id is None or p_name is None:
+        resp = Response("{}", status=400, mimetype='application/json')
+    else:
+        info = db.getInfo(g_id, p_name)
+        resp = jsonify(info)
+        if info is None:
+            resp.status_code = 400
+    return resp
 
 ###########################################################################
 # GPS
@@ -56,10 +65,12 @@ def gps():
     return postGPS(request)
 
 def getGPS(req):
+    # TODO
     # return GPS coordinates of target
     pass
 
 def postGPS(req):
+    # TODO
     # update assassin's location
     pass
 
@@ -73,12 +84,45 @@ def status():
     return postStatus(request)
 
 def getStatus(req):
+    # TODO
     # return status of player
     pass
 
 def postStatus(req):
+    # TODO
     # update player's status
     pass
+
+###########################################################################
+# Target
+@app.route("/api/target", methods=["GET", "POST"])
+def target():
+    if request.method == "GET":
+        return getTarget(request)
+    # else request.method == "POST"
+    return attackTarget(request)
+
+def getTarget(req):
+    # TODO
+    # return target of player
+    pass
+
+def attackTarget(req):
+    # TODO
+    # kill a target
+    # Does not update target directly
+    pass
+
+###########################################################################
+''' Utility '''
+###########################################################################
+
+def assignTargets():
+    pass
+
+def updateTarget():
+    pass
+
 
 ###########################################################################
 ###########################################################################
