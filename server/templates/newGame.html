@@ -11,9 +11,17 @@
     <p>Stuff n things <a href="https://en.wikipedia.org/wiki/Assassin_(game)">ehhh</a>...</p>
 
     <button type="button" id="btnAlert" onclick="beep()">Alert</button>
+    <div id="playerInfo" class="playerInfo">
+        <ul id="infoList" class="playerInfo">
+            <li id="playerNumberText" class="playerInfo">
+                Number of players:
+            </li>
+        </ul>
+    </div>
 
 	<!-- ================== JavaScript ================== -->
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="static/js/script.js"></script>
+    <script> window.onload=numPlayers </script>
 </body>
 </html>
