@@ -13,9 +13,14 @@ var numPlayers = function() {
     // what you could do with the getElement* functions. Like a wise 
     // person once said, life is too short to spend time learning about 
     // old JavaScript functions."
-    var div = document.querySelector("#playerInfo");
-    var num = document.createElement("SELECT");
-    alert("wooOOOOOOt");
+    var selDrop = document.querySelector("#playerNumberDrop");
+    for (i = 0; i < 10; i++) { 
+        var j = i + 1;
+        var numOpt  = document.createElement("OPTION");
+        numOpt.setAttribute("value",j.toString());
+        numOpt.innerHTML = j.toString();
+        selDrop.appendChild(numOpt);
+    }
 };
 
 
