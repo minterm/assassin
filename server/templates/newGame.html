@@ -8,17 +8,15 @@
 <body>
 
     <h1>Create Game</h1>
-    <p>Stuff n things <a href="https://en.wikipedia.org/wiki/Assassin_(game)">ehhh</a>...</p>
+    <p>Enter player info to begin</p>
 
-    <button type="button" id="btnAlert" onclick="beep()">Alert</button>
     <div id="playerInfo" class="playerInfo">
+        Number of players:
+        <select id="playerNumberDrop" class="playerInfo" onchange="playerFields(this)">
+        </select>
         <ul id="infoList" class="playerInfo">
-            <li id="playerNumberText" class="playerInfo">
-                Number of players:
-                <select id="playerNumberDrop" class="playerInfo">
-                </select>
-            </li>
         </ul>
+        <button type="button" id="btnAlert" onclick="startGame()">Start Game</button>
     </div>
 
 	<!-- ================== JavaScript ================== -->
