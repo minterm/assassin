@@ -59,6 +59,18 @@ def info():
     g_id   = request.args.get("g_id")
     p_name = request.args.get("p_name")
     resp   = None
+
+    # test behavior without database
+    resp = {}
+    resp['alive'] = 1
+    resp['g_id']  = g_id
+    resp['location'] = "right here"
+    resp['p_id'] = 1
+    resp['p_name'] = p_name
+    resp['target'] = p_name + "'s target"
+    return jsonify(resp)
+
+    # actual behavior
     if g_id is None or p_name is None:
         resp = Response("{}", status=400, mimetype='application/json')
     else:
