@@ -32,11 +32,12 @@ var numPlayers = function() {
 var playerFields = function(playerNumberDrop) {
     var playerNum = parseInt(playerNumberDrop.value);
     if (isNaN(playerNum)) return;
-    var ul = document.querySelector("#infoList");
+    var ul   = document.querySelector("#infoList");
+    var form = document.querySelector("#pInfoForm");
 
     // Remove any existing player fields
-    while(ul.hasChildNodes()) {
-        ul.removeChild(ul.lastChild);
+    while(form.hasChildNodes()) {
+        form.removeChild(form.lastChild);
     }
 
     // Create new player fields
@@ -47,9 +48,25 @@ var playerFields = function(playerNumberDrop) {
         playerField.setAttribute("id", p_id);
         playerField.setAttribute("class", "playerInfo");
         playerField.innerHTML = "Player " + j.toString() + ": ";
-        ul.appendChild(playerField);
 
-        // TODO: add input things to playerField
+        var playerName = document.createElement("INPUT");
+        playerName.setAttribute("type", "text");
+        playerName.setAttribute("class", "playerNames");
+        name = "p" + j.toString()
+        playerName.setAttribute("name", name);
+        playerName.setAttribute("value", "name");
+
+        playerField.appendChild(playerName);
+        form.appendChild(playerField);
+
+        // TODO: more input things to playerField?
+    }
+    if (playerNum > 0) {
+        var submit = document.createElement("INPUT");
+        submit.setAttribute("type", "submit");
+        submit.setAttribute("value", "Start Game");
+        form.appendChild(document.createElement("BR"));
+        form.appendChild(submit);
     }
 };
 

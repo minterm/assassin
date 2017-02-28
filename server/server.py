@@ -6,6 +6,7 @@
 # Team: Micah Cliffe, Christine Nguyen, Andrew Arifin, Nick Adair
 # Primary maintainer: Micah Cliffe <micah.cliffe@ucla.edu>
 
+import random
 from flask import Flask, jsonify, render_template, request, Response
 import db_util as db
 
@@ -23,9 +24,21 @@ app        = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route("/new")
+@app.route("/new", methods=["GET", "POST"])
 def newGame():
-    return render_template('newGame.html')
+    if request.method == "GET":
+        return render_template('newGame.html')
+
+    # else request.method == "POST"
+    playerNames = []
+    for form in request.form:
+        playerNames.append(request.form[form])
+    assassin_targets = _assignTargets(playerNames) 
+    return jsonify(assassin_targets)
+    #TODO: Create game number, create game table, etc 
+    # get keys of dictionary with dictionaree.keys()
+    return ""
+
 
 @app.route("/view")
 def viewGame():
@@ -117,10 +130,41 @@ def attackTarget(req):
 ''' Utility '''
 ###########################################################################
 
-def assignTargets():
-    pass
+def _assignTargets(players):
+    # accept a list of players
+    # return a dictionary of {assassin: target}
+    if len(players) <= 1:
+        return None
+    assassins = players # DON'T MODIFY ASSASSINS
+    targets   = list(players)
+    aT        = {}
+    r         = random.SystemRandom()
+    conflict  = True
+    while conflict:
+        conflict = False
+        r.shuffle(targets)
+        for assassin, target in zip(assassins, targets):
+            if assassin == target:
+                conflict = True
+    for assassin, target in zip(assassins, targets):
+        aT[assassin] = target
+    return aT
 
-def updateTarget():
+def _chooseTarget(assassin, targets):
+    print "Targets: " + str(targets)
+    target = random.choice(targets)
+    print "Target: " + target
+    #TODO ERRRORORORORO
+    if target == assassin:
+        raw_input("target: " + target + ". assassin: " + assassin)
+        if len(targets) is 1:
+            raise Exception('One target left. Retry.')
+        return _chooseTarget(assassin, targets)
+    else:
+        raw_input("target: " + target + ". assassin: " + assassin)
+        return target
+
+def _updateTarget():
     pass
 
 
