@@ -81,62 +81,21 @@ def info():
     return resp
 
 ###########################################################################
-# GPS
-@app.route("/api/gps", methods=["GET", "POST"])
+# Post Location
+@app.route("/api/gps", methods=["POST"])
 def gps():
-    if request.method == "GET":
-        return getGPS(request)
-    # else request.method == "POST"
-    return postGPS(request)
-
-def getGPS(req):
-    # TODO
-    # return GPS coordinates of target
-    pass
-
-def postGPS(req):
     # TODO
     # update assassin's location
-    pass
+    return ""
 
 ###########################################################################
-# Status
-@app.route("/api/status", methods=["GET", "POST"])
-def status():
-    if request.method == "GET":
-        return getStatus(request)
-    # else request.method == "POST"
-    return postStatus(request)
-
-def getStatus(req):
-    # TODO
-    # return status of player
-    pass
-
-def postStatus(req):
-    # TODO
-    # update player's status
-    pass
-
-###########################################################################
-# Target
-@app.route("/api/target", methods=["GET", "POST"])
-def target():
-    if request.method == "GET":
-        return getTarget(request)
-    # else request.method == "POST"
-    return attackTarget(request)
-
-def getTarget(req):
-    # TODO
-    # return target of player
-    pass
-
-def attackTarget(req):
+# Attack Target
+@app.route("/api/attack", methods=["POST"])
+def attackTarget():
     # TODO
     # kill a target
     # Does not update target directly
-    pass
+    return ""
 
 ###########################################################################
 ''' Utility '''
@@ -162,23 +121,8 @@ def _assignTargets(players):
         aT[assassin] = target
     return aT
 
-def _chooseTarget(assassin, targets):
-    print "Targets: " + str(targets)
-    target = random.choice(targets)
-    print "Target: " + target
-    #TODO ERRRORORORORO
-    if target == assassin:
-        raw_input("target: " + target + ". assassin: " + assassin)
-        if len(targets) is 1:
-            raise Exception('One target left. Retry.')
-        return _chooseTarget(assassin, targets)
-    else:
-        raw_input("target: " + target + ". assassin: " + assassin)
-        return target
-
 def _updateTarget():
     pass
-
 
 ###########################################################################
 ###########################################################################
