@@ -15,6 +15,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".InGame" />
+        <activity android:name=".Winner" />
+        <activity android:name=".Lose"></activity>
     </application>
 
 </manifest>
