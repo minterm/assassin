@@ -14,6 +14,7 @@ public class InGame extends AppCompatActivity {
     }
 
     public void backToMain(View view){
-        startActivity(new Intent(InGame.this, MainActivity.class));
+        //startActivity(new Intent(InGame.this, MainActivity.class));
+        finish();
     }
 }
