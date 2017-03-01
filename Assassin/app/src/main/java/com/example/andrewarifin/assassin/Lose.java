@@ -13,6 +13,7 @@ public class Lose extends AppCompatActivity {
         setContentView(R.layout.activity_lose);
     }
     public void backToMain(View view){
-        startActivity(new Intent(Lose.this, MainActivity.class));
+        //startActivity(new Intent(Lose.this, MainActivity.class));
+        finish();
     }
 }
