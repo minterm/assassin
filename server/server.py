@@ -39,10 +39,10 @@ def newGame():
     db.createGameTable(g_id)
     for assassin in assassin_targets:
         if not db.addPlayer(g_id, assassin):
-            deleteGameTable(g_id)
+            db.deleteGameTable(g_id)
             return "Failed to add assassin: " + assassin
         if not db.setTarget(g_id, assassin, assassin_targets[assassin]):
-            deleteGameTable(g_id)
+            db.deleteGameTable(g_id)
             return "Failed to add target: " + assassin_targets[assassin]
     return g_id
 

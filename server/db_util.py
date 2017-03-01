@@ -28,11 +28,15 @@ def createGameTable(g_id):
     col3 = "alive INT(1) DEFAULT 1"
     col4 = "location TEXT DEFAULT NULL"
     col5 = "target VARCHAR(45) DEFAULT NULL"
+    col6 = "p_mac VARCHAR(17) DEFAULT NULL"
+    col7 = "t_mac VARCHAR(17) DEFAULT NULL"
     prim = "PRIMARY KEY(p_id)"
     cmd  = "CREATE TABLE IF NOT EXISTS " + table_name + "("
     cmd += col1 + ", " + col2 + ", " + col3 + ", " + col4 + ", " + col5 + ", "
+    cmd += col6 + ", " + col7 + ", "
     cmd += prim + ") engine=InnoDB"
     # TODO: change primary key to p_name maybe
+    #TODO: Add getters and setters for MAC addresses
     if (_execute(cmd)):
         print table_name + " was created."
         _addGameID(table_name)
@@ -86,12 +90,38 @@ def setTarget(g_id, p_name, target):
     print "Unable to update " + p_name + " target."
     return False
 
+def setMAC(g_id, p_name, mac):
+    if len(mac) > 17:
+        print "Invalid MAC address."
+        return False
+    t_name = tableName(g_id)
+    cmd  = "UPDATE " + t_name + " SET p_mac = '" + mac + "' WHERE "
+    cmd += "p_name = '" + p_name + "'"
+    if (_execute(cmd)):
+        print p_name + "'s MAC is now " + mac + "."
+        return True
+    print "Unable to update " + p_name + " MAC."
+    return False
+
+def setTargetMAC(g_id, p_name, t_mac):
+    if len(t_mac) > 17:
+        print "Invalid target MAC address."
+        return False
+    t_name = tableName(g_id)
+    cmd  = "UPDATE " + t_name + " SET t_mac = '" + t_mac + "' WHERE "
+    cmd += "p_name = '" + p_name + "'"
+    if (_execute(cmd)):
+        print p_name + "'s target MAC is now " + t_mac + "."
+        return True
+    print "Unable to update " + p_name + " target MAC."
+    return False
+
 def deleteGameTable(g_id):
     t_name = tableName(g_id)
     cmd    = "DROP TABLE IF EXISTS " + t_name
     if (_execute(cmd)):
         print t_name + " was dropped."
-        _removeGameID(table_name)
+        _removeGameID(t_name)
         return True
     print "Unable to drop " + t_name + "."
     return False
