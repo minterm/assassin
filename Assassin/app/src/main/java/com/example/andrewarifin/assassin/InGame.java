@@ -19,4 +19,6 @@ public class InGame extends AppCompatActivity {
         //startActivity(new Intent(InGame.this, MainActivity.class));
         finish();
     }
+
+
 }
