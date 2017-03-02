@@ -28,16 +28,23 @@ def index():
 def newGame():
     if request.method == "GET":
         return render_template('newGame.html')
-
     # else request.method == "POST"
     playerNames = []
     for form in request.form:
         playerNames.append(request.form[form])
+    #TODO: Check unique names!
     assassin_targets = _assignTargets(playerNames) 
-    return jsonify(assassin_targets)
-    #TODO: Create game number, create game table, etc 
-    # get keys of dictionary with dictionaree.keys()
-    return ""
+    g_id = _createGameID()
+    if not g_id: return "Too many games currently running."
+    db.createGameTable(g_id)
+    for assassin in assassin_targets:
+        if not db.addPlayer(g_id, assassin):
+            db.deleteGameTable(g_id)
+            return "Failed to add assassin: " + assassin
+        if not db.setTarget(g_id, assassin, assassin_targets[assassin]):
+            db.deleteGameTable(g_id)
+            return "Failed to add target: " + assassin_targets[assassin]
+    return g_id
 
 
 @app.route("/view")
@@ -123,6 +130,16 @@ def _assignTargets(players):
 
 def _updateTarget():
     pass
+
+def _createGameID():
+    ids = db.getGameIDs()
+    if len(ids) > 999:
+        # Too many games
+        return False
+    g_id = "g_" + str(random.randint(0,999))
+    while (g_id in ids):
+        g_id = "g_" + str(random.randint(0,999))
+    return g_id
 
 ###########################################################################
 ###########################################################################
