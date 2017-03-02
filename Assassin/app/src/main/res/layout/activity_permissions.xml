@@ -33,7 +33,7 @@
         android:layout_alignParentEnd="true" />
 
     <TextView
-        android:text="Bluetooth"
+        android:text="First, turn Bluetooth on:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="33dp"
@@ -43,14 +43,14 @@
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:text="Discoverability"
+        android:text="Then, turn Discoverability on:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/button9"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="41dp"
-        android:id="@+id/textView14" />
+        android:id="@+id/textView14"/>
 
     <Button
         android:text="DISCONOFF"
@@ -62,5 +62,29 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="dbutton"
+        />
+
+    <Button
+        android:text="Done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/button11"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="backToMain"
+        />
+
+    <TextView
+        android:text="Once both are on:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView15"
+        android:layout_above="@+id/button11"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

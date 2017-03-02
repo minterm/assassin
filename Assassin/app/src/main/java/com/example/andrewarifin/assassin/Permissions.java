@@ -31,6 +31,8 @@ public class Permissions extends AppCompatActivity {
             //mBluetoothAdapter.disable();
         }
 
+        TextView disc = (TextView) findViewById(R.id.button10);
+        disc.setText("Enable");
     }
 
     public void btbutton(View view){
@@ -44,6 +46,32 @@ public class Permissions extends AppCompatActivity {
             tv.setText("Enable");
             mBluetoothAdapter.disable();
         }
+        reloadButtons(view);
     }
 
+    public void dbutton(View view){
+        Intent discoverableIntent =
+                new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
+        startActivity(discoverableIntent);
+        TextView disc = (TextView) findViewById(R.id.button10);
+        disc.setText("Disable");
+        reloadButtons(view);
+    }
+
+    public void reloadButtons(View view){
+        if (!mBluetoothAdapter.isEnabled()) {
+            TextView tv = (TextView) findViewById(R.id.button9);
+            tv.setText("Enable");
+        }
+        else {
+            TextView tv = (TextView) findViewById(R.id.button9);
+            tv.setText("Disable");
+        }
+    }
+
+    public void backToMain(View view){
+        //startActivity(new Intent(Lose.this, MainActivity.class));
+        finish();
+    }
 }
