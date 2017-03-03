@@ -15,8 +15,6 @@ PASSWORD = 'assassin'
 DATABASE = 'Assassin'
 ID_TABLE = 'ID_Table'
 
-#TODO: Constantly have table of open game ids
-
 ###############################################################################
 ''' Setters '''
 
@@ -131,6 +129,20 @@ def deleteGameTable(g_id):
 
 def getTables():
     return(_query("SHOW TABLES"))
+
+def getTable(g_id):
+    t_name = tableName(g_id)
+    resp   = _query("SELECT * FROM " + t_name)
+    return resp
+
+def getView(g_id):
+    t_name = tableName(g_id)
+    qu = "SELECT p_id, p_name, alive FROM " + t_name
+    r  = _query(qu)
+    ret = []
+    for p in r:
+        ret.append({"p_id": p[0], "p_name": p[1], "alive": p[2]})
+    return ret
 
 def getLocation(g_id, p_name):
     t_name = tableName(g_id)
@@ -275,7 +287,13 @@ if __name__ == "__main__":
     _addGameID(666)
     _removeGameID(666)
     '''
-    print getGameIDs()
+
+    '''
+    ids = getGameIDs()
+    for i in ids:
+        if i != "g_124":
+            deleteGameTable(i)
+    '''
 
     for resp in getTables():
         print resp[0]

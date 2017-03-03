@@ -32,11 +32,11 @@ def newGame():
     playerNames = []
     for form in request.form:
         playerNames.append(request.form[form])
-    #TODO: Check unique names!
-    assassin_targets = _assignTargets(playerNames) 
+    assassin_targets = _assignTargets(playerNames)
     g_id = _createGameID()
     if not g_id: return "Too many games currently running."
     db.createGameTable(g_id)
+    # TODO: add home button
     for assassin in assassin_targets:
         if not db.addPlayer(g_id, assassin):
             db.deleteGameTable(g_id)
@@ -44,7 +44,7 @@ def newGame():
         if not db.setTarget(g_id, assassin, assassin_targets[assassin]):
             db.deleteGameTable(g_id)
             return "Failed to add target: " + assassin_targets[assassin]
-    return g_id
+    return "Open the mobile app and join game: " + g_id
 
 
 @app.route("/view")
@@ -53,8 +53,15 @@ def viewGame():
     if g_id is None:
         return render_template('viewGameSetup.html')
     # Get info from database and display on page for given g_id
-    return g_id
-    return render_template('viewGame.html', g_id=g_id)
+    ''' if g_id is real, then render viewGame. else, return invalid '''
+    g_id = db.tableName(g_id)
+    if g_id not in db.getGameIDs():
+        return render_template('invalidGame.html')
+    #info = ""
+    #for row in db.getTable(g_id):
+    #    info += str(row) + "\n"
+    info = str(db.getView(g_id))
+    return render_template('viewGame.html', g_id=g_id, info=info)
 
 ###########################################################################
 ''' Android app URLs '''
