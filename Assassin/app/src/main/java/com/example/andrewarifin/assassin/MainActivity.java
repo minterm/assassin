@@ -41,5 +41,6 @@ public class MainActivity extends AppCompatActivity {
     public void goToLose(View view){
         startActivity(new Intent(MainActivity.this, Lose.class));
     }
+    public void goToBTSettings(View view) { startActivity(new Intent(MainActivity.this, Permissions.class)); }
 }
 
