@@ -26,6 +26,7 @@ def index():
 
 @app.route("/new", methods=["GET", "POST"])
 def newGame():
+    # TODO: use template instead of just returning text
     if request.method == "GET":
         return render_template('newGame.html')
     # else request.method == "POST"
@@ -36,7 +37,6 @@ def newGame():
     g_id = _createGameID()
     if not g_id: return "Too many games currently running."
     db.createGameTable(g_id)
-    # TODO: add home button
     for assassin in assassin_targets:
         if not db.addPlayer(g_id, assassin):
             db.deleteGameTable(g_id)
@@ -57,16 +57,24 @@ def viewGame():
     g_id = db.tableName(g_id)
     if g_id not in db.getGameIDs():
         return render_template('invalidGame.html')
-    #info = ""
-    #for row in db.getTable(g_id):
-    #    info += str(row) + "\n"
-    info = str(db.getView(g_id))
+    info = _formatView(db.getView(g_id))
     return render_template('viewGame.html', g_id=g_id, info=info)
+
+def _formatView(view):
+    form = []
+    for v in view:
+        p_id   = str(v["p_id"])
+        p_name = str(v["p_name"])
+        if (v["p_id"]):
+            alive = "alive"
+        else:
+            alive = "dead"
+        form.append(p_id + " | " + p_name + " | " + alive)
+    return form
 
 ###########################################################################
 ''' Android app URLs '''
 ###########################################################################
-
 # GetInfo
 @app.route("/api/info", methods=["GET"])
 def info():
@@ -95,12 +103,50 @@ def info():
     return resp
 
 ###########################################################################
+# Join Game
+@app.route("/api/join", methods=["POST"])
+def join():
+    # provide assassin's MAC address and location
+    try:
+        data   = request.get_json(force=True)
+        p_name = data["p_name"]
+        g_id   = data["g_id"]
+        mac    = data["mac"]
+        loc    = data["loc"]
+    except Exception as e:
+        print e
+        resp             = jsonify({"success": "false", "error": e})
+        resp.status_code = 400
+        return resp
+    error = False
+    if (not db.setMAC(g_id, p_name, mac)): error = True
+    if (not db.setLocation(g_id, p_name, loc)): error = True
+    if error:
+        resp             = jsonify({"success": "false"})
+        resp.status_code = 400
+        return resp
+    return jsonify({"success": "true"})
+
+###########################################################################
 # Post Location
 @app.route("/api/gps", methods=["POST"])
 def gps():
-    # TODO
     # update assassin's location
-    return ""
+    try:
+        data   = request.get_json(force=True)
+        p_name = data["p_name"]
+        g_id   = data["g_id"]
+        loc    = data["loc"]
+    except Exception as e:
+        print e
+        resp             = jsonify({"success": "false", "error": e})
+        resp.status_code = 400
+        return resp
+    if (db.setLocation(g_id, p_name, loc)): 
+        return jsonify({"success": "true"})
+    resp             = jsonify({"success": "false"})
+    resp.status_code = 400
+    return resp
 
 ###########################################################################
 # Attack Target

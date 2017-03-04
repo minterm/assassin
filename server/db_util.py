@@ -6,6 +6,8 @@
 # Team: Micah Cliffe, Christine Nguyen, Andrew Arifin, Nick Adair
 # Primary maintainer: Micah Cliffe <micah.cliffe@ucla.edu>
 
+# Checking for sensible data inputs should be done outside of db_util
+
 import MySQLdb as mdb
 import sys
 
@@ -47,22 +49,12 @@ def addPlayer(g_id, p_name):
         print "Player name too long."
         return False
     t_name = tableName(g_id)
-    if not _checkUnique(t_name, p_name):
-        print "Player name not unique."
-        return False
     cmd = "INSERT INTO " + t_name + "(p_name) VALUES('" + p_name + "')"
     if (_execute(cmd)):
         print p_name + " was added to " + t_name + "."
         return True
     print "Unable to add " + p_name + " to " + t_name + "."
     return False
-
-def _checkUnique(t_name, p_name):
-    resp = _query("SELECT p_name FROM " + t_name)
-    for p in resp:
-        if p[0] == p_name:
-            return False
-    return True
 
 def setLocation(g_id, p_name, loc):
     t_name = tableName(g_id)
