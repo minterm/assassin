@@ -80,6 +80,18 @@ def setTarget(g_id, p_name, target):
     print "Unable to update " + p_name + " target."
     return False
 
+def setStatus(g_id, p_name, status):
+    if status != 0:
+        status = 1
+    t_name = tableName(g_id)
+    cmd  = "UPDATE " + t_name + " SET alive = '" + status + "' WHERE "
+    cmd += "p_name = '" + p_name + "'"
+    if (_execute(cmd)):
+        print p_name + " alive = " + str(status) + "."
+        return True
+    print "Unable to update " + p_name + "'s status."
+    return False
+
 def setMAC(g_id, p_name, mac):
     if len(mac) > 17:
         print "Invalid MAC address."

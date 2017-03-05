@@ -2,23 +2,23 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-    <title>View Game</title>
+    <title>New Game</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
-    <h1>View Game</h1>
-    <p>Enter the ID of the game to view.</p>
-    <form action="view">
-        Game ID: <input type="text" name="g_id" value="###"><br>
-        <input type="submit" value="Submit">
-    </form>
+    {% if success %}
+    <h1>Game {{ g_id }}</h1>
+    <p>Open the mobile app and join this game using the ID: {{ g_id }}</p>
+    {% else %}
+    <h1>Failed to Create Game</h1>
+    <p>{{ error }}</p>
+    {% endif %}
 
     <br>
     <div>
         <a href="/"><button>Home</button></a>
         <a href="/new"><button>New</button></a>
+        <a href="/view"><button>View</button></a>
     </div>
-
 </body>
 </html>

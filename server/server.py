@@ -24,6 +24,10 @@ app        = Flask(__name__)
 def index():
     return render_template('index.html')
 
+@app.route("/instructions")
+def instructions():
+    return render_template('instructions.html')
+
 @app.route("/new", methods=["GET", "POST"])
 def newGame():
     # TODO: use template instead of just returning text
@@ -35,16 +39,20 @@ def newGame():
         playerNames.append(request.form[form])
     assassin_targets = _assignTargets(playerNames)
     g_id = _createGameID()
-    if not g_id: return "Too many games currently running."
+    if not g_id:
+        err = "Too many games currently running."
+        return render_template('gameCreated.html', g_id=g_id, success=False, error=err)
     db.createGameTable(g_id)
     for assassin in assassin_targets:
         if not db.addPlayer(g_id, assassin):
             db.deleteGameTable(g_id)
-            return "Failed to add assassin: " + assassin
+            err = "Failed to add assassin: " + assassin
+            return render_template('gameCreated.html', g_id=g_id, success=False, error=err)
         if not db.setTarget(g_id, assassin, assassin_targets[assassin]):
             db.deleteGameTable(g_id)
-            return "Failed to add target: " + assassin_targets[assassin]
-    return "Open the mobile app and join game: " + g_id
+            err = "Failed to add target: " + assassin_targets[assassin]
+            return render_template('gameCreated.html', g_id=g_id, success=False, error=err)
+    return render_template('gameCreated.html', g_id=g_id, success=True, error="")
 
 
 @app.route("/view")
@@ -59,18 +67,6 @@ def viewGame():
         return render_template('invalidGame.html')
     info = _formatView(db.getView(g_id))
     return render_template('viewGame.html', g_id=g_id, info=info)
-
-def _formatView(view):
-    form = []
-    for v in view:
-        p_id   = str(v["p_id"])
-        p_name = str(v["p_name"])
-        if (v["p_id"]):
-            alive = "alive"
-        else:
-            alive = "dead"
-        form.append(p_id + " | " + p_name + " | " + alive)
-    return form
 
 ###########################################################################
 ''' Android app URLs '''
@@ -152,10 +148,30 @@ def gps():
 # Attack Target
 @app.route("/api/attack", methods=["POST"])
 def attackTarget():
-    # TODO
     # kill a target
     # Does not update target directly
-    return ""
+    try:
+        data   = request.get_json(force=True)
+        p_name = data["p_name"]
+        g_id   = data["g_id"]
+        target = data["target"]
+    except Exception as e:
+        print e
+        resp             = jsonify({"success": "false", "error": e})
+        resp.status_code = 400
+        return resp
+    if int(db.getStatus(g_id, target)) == 0:
+        resp = jsonify({"success": "false", "error":
+                        "target already dead"})
+        resp.status_code = 400
+        return resp
+    if (db.setStatus(g_id, target, 0)): 
+        newTarget = _updateTarget(g_id, p_name, target)
+        resp = {"success": "true", "target": newTarget}
+        return jsonify(resp)
+    resp             = jsonify({"success": "false"})
+    resp.status_code = 400
+    return resp
 
 ###########################################################################
 ''' Utility '''
@@ -181,8 +197,10 @@ def _assignTargets(players):
         aT[assassin] = target
     return aT
 
-def _updateTarget():
-    pass
+def _updateTarget(g_id, p_name, target):
+    newTarget = db.getTarget(g_id, target)
+    db.setTarget(g_id, p_name, newTarget)
+    return newTarget
 
 def _createGameID():
     ids = db.getGameIDs()
@@ -193,6 +211,18 @@ def _createGameID():
     while (g_id in ids):
         g_id = "g_" + str(random.randint(0,999))
     return g_id
+
+def _formatView(view):
+    form = []
+    for v in view:
+        p_id   = str(v["p_id"])
+        p_name = str(v["p_name"])
+        if (v["p_id"]):
+            alive = "alive"
+        else:
+            alive = "dead"
+        form.append(p_id + " | " + p_name + " | " + alive)
+    return form
 
 ###########################################################################
 ###########################################################################
