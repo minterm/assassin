@@ -184,6 +184,24 @@ def getInfo(g_id, p_name):
         return d
     return None
 
+def getActive(g_id):
+    t_name = tableName(g_id)
+    qu     = "SELECT p_name FROM " + t_name + " WHERE alive=1"
+    resp   = _query(qu)
+    ret    = []
+    for r in resp:
+        ret.append(r[0])
+    return ret
+
+def getMacNumber(g_id):
+    t_name = tableName(g_id)
+    qu     = "SELECT p_mac FROM " + t_name
+    resp   = _query(qu)
+    ret    = []
+    for r in resp:
+        ret.append(r[0])
+    return ret
+    
 def getGameIDs():
     resp = _query("SELECT g_id FROM " + ID_TABLE)
     if resp:

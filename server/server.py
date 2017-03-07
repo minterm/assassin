@@ -13,6 +13,8 @@ import db_util as db
 API_SECRET = "shh"
 app        = Flask(__name__)
 
+# TODO: Check when game is finished, determine winner, provide target MAC
+
 ###########################################################################
 ''' Human user URLS '''
 ###########################################################################
@@ -30,7 +32,6 @@ def instructions():
 
 @app.route("/new", methods=["GET", "POST"])
 def newGame():
-    # TODO: use template instead of just returning text
     if request.method == "GET":
         return render_template('newGame.html')
     # else request.method == "POST"
@@ -41,18 +42,22 @@ def newGame():
     g_id = _createGameID()
     if not g_id:
         err = "Too many games currently running."
-        return render_template('gameCreated.html', g_id=g_id, success=False, error=err)
+        return render_template('gameCreated.html', g_id=g_id,
+                                success=False, error=err)
     db.createGameTable(g_id)
     for assassin in assassin_targets:
         if not db.addPlayer(g_id, assassin):
             db.deleteGameTable(g_id)
             err = "Failed to add assassin: " + assassin
-            return render_template('gameCreated.html', g_id=g_id, success=False, error=err)
+            return render_template('gameCreated.html', g_id=g_id, 
+                                    success=False, error=err)
         if not db.setTarget(g_id, assassin, assassin_targets[assassin]):
             db.deleteGameTable(g_id)
             err = "Failed to add target: " + assassin_targets[assassin]
-            return render_template('gameCreated.html', g_id=g_id, success=False, error=err)
-    return render_template('gameCreated.html', g_id=g_id, success=True, error="")
+            return render_template('gameCreated.html', g_id=g_id, 
+                                    success=False, error=err)
+    return render_template('gameCreated.html', g_id=g_id, success=True, 
+                            error="")
 
 
 @app.route("/view")
@@ -74,11 +79,15 @@ def viewGame():
 # GetInfo
 @app.route("/api/info", methods=["GET"])
 def info():
+    # Takes parameters: g_id, p_name
+    # Return p_id, alive, location, target, p_name, g_id
+    # TODO: Change returns: lcation->target location, target->p_mac of target
     g_id   = request.args.get("g_id")
     p_name = request.args.get("p_name")
     resp   = None
 
     # test behavior without database
+    '''
     resp = {}
     resp['alive'] = 1
     resp['g_id']  = g_id
@@ -87,6 +96,7 @@ def info():
     resp['p_name'] = p_name
     resp['target'] = p_name + "'s target"
     return jsonify(resp)
+    '''
 
     # actual behavior
     if g_id is None or p_name is None:
@@ -99,10 +109,33 @@ def info():
     return resp
 
 ###########################################################################
+# Get Game Status
+@app.route("/api/gameplay", methods=["GET"])
+def gameplay():
+    # Takes parameters: g_id
+    # Return if game is 0 (waiting), 1 (active), 2 (finished) with winner
+    g_id  = request.args.get("g_id")
+    gp    = db.getActive(g_id)
+    ret   = {}
+    gSize = len(gp)
+    if gSize == 1:
+        ret = {"status": 2, "winner": gp[0]}
+    else:
+        macLen = len(db.getMacNumber(g_id))
+        actLen = len(gp)
+        if macLen < actLen:
+            ret = {"status": 0}
+        else:
+            ret = {"status": 1}
+    return jsonify(ret)
+
+###########################################################################
 # Join Game
 @app.route("/api/join", methods=["POST"])
 def join():
     # provide assassin's MAC address and location
+    # Takes data: p_name, g_id, mac, loc
+    # Return {"success": "true"/"false" [,"error": e]}
     try:
         data   = request.get_json(force=True)
         p_name = data["p_name"]
@@ -128,6 +161,8 @@ def join():
 @app.route("/api/gps", methods=["POST"])
 def gps():
     # update assassin's location
+    # Takes data: p_name, g_id, loc
+    # Return {"success": "true"/"false" [,"error": e]}
     try:
         data   = request.get_json(force=True)
         p_name = data["p_name"]
@@ -150,6 +185,9 @@ def gps():
 def attackTarget():
     # kill a target
     # Does not update target directly
+    # Takes data: p_name, g_id, target = mac of target
+    # Return {"success": "false" [,"error": e]}
+    # Return {"success": "true", "target": newTarget]}
     try:
         data   = request.get_json(force=True)
         p_name = data["p_name"]
@@ -182,7 +220,7 @@ def _assignTargets(players):
     # return a dictionary of {assassin: target}
     if len(players) <= 1:
         return None
-    assassins = players # DON'T MODIFY ASSASSINS
+    assassins = players # DON'T MODIFY assassins
     targets   = list(players)
     aT        = {}
     r         = random.SystemRandom()
