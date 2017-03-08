@@ -4,10 +4,6 @@
 
 var EMPTY_SELECT = "--";
 
-var startGame = function() {
-    alert("Not implemented yet. Soz.");
-};
-
 var numPlayers = function() {
     // Find div element. Use # to find an ID. Use . to find a class.
     // "In general, you should just use querySelector and querySelectorAll.
@@ -20,7 +16,7 @@ var numPlayers = function() {
     numOpt.setAttribute("value","0");
     numOpt.innerHTML = EMPTY_SELECT;
     selDrop.appendChild(numOpt);
-    for (i = 0; i < 10; i++) { 
+    for (i = 1; i < 10; i++) { 
         var j = i + 1;
         var numOpt  = document.createElement("OPTION");
         numOpt.setAttribute("value",j.toString());
@@ -58,8 +54,6 @@ var playerFields = function(playerNumberDrop) {
 
         playerField.appendChild(playerName);
         form.appendChild(playerField);
-
-        // TODO: more input things to playerField?
     }
     if (playerNum > 0) {
         var submit = document.createElement("INPUT");
@@ -68,6 +62,29 @@ var playerFields = function(playerNumberDrop) {
         form.appendChild(document.createElement("BR"));
         form.appendChild(submit);
     }
+};
+
+var nameCheck = function() {
+    var playerFields = document.getElementById('pInfoForm').getElementsByTagName('*');
+    var players      = [];
+    for (var i = 0; i < playerFields.length; i++) {
+        if (playerFields[i].tagName === "INPUT") {
+            if (playerFields[i].type === "text")
+                players.push(playerFields[i].value);
+        }
+    }
+    conflict = false;
+    for (var i = 0; i < players.length; i++) {
+        for (var j = 0; j < players.length; j++) {
+            if (j === i) continue;
+            if (players[i] === players[j]) conflict = true;
+        }
+    }
+    if (conflict) {
+        alert("Please use unique names.");
+        return false;
+    }
+    return true;
 };
 
 

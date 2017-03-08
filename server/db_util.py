@@ -6,6 +6,8 @@
 # Team: Micah Cliffe, Christine Nguyen, Andrew Arifin, Nick Adair
 # Primary maintainer: Micah Cliffe <micah.cliffe@ucla.edu>
 
+# Checking for sensible data inputs should be done outside of db_util
+
 import MySQLdb as mdb
 import sys
 
@@ -14,8 +16,6 @@ USERNAME = 'assassin'
 PASSWORD = 'assassin'
 DATABASE = 'Assassin'
 ID_TABLE = 'ID_Table'
-
-#TODO: Constantly have table of open game ids
 
 ###############################################################################
 ''' Setters '''
@@ -49,22 +49,12 @@ def addPlayer(g_id, p_name):
         print "Player name too long."
         return False
     t_name = tableName(g_id)
-    if not _checkUnique(t_name, p_name):
-        print "Player name not unique."
-        return False
     cmd = "INSERT INTO " + t_name + "(p_name) VALUES('" + p_name + "')"
     if (_execute(cmd)):
         print p_name + " was added to " + t_name + "."
         return True
     print "Unable to add " + p_name + " to " + t_name + "."
     return False
-
-def _checkUnique(t_name, p_name):
-    resp = _query("SELECT p_name FROM " + t_name)
-    for p in resp:
-        if p[0] == p_name:
-            return False
-    return True
 
 def setLocation(g_id, p_name, loc):
     t_name = tableName(g_id)
@@ -88,6 +78,18 @@ def setTarget(g_id, p_name, target):
         print p_name + "'s target is now " + target + "."
         return True
     print "Unable to update " + p_name + " target."
+    return False
+
+def setStatus(g_id, p_name, status):
+    if status != 0:
+        status = 1
+    t_name = tableName(g_id)
+    cmd  = "UPDATE " + t_name + " SET alive = '" + status + "' WHERE "
+    cmd += "p_name = '" + p_name + "'"
+    if (_execute(cmd)):
+        print p_name + " alive = " + str(status) + "."
+        return True
+    print "Unable to update " + p_name + "'s status."
     return False
 
 def setMAC(g_id, p_name, mac):
@@ -132,6 +134,20 @@ def deleteGameTable(g_id):
 def getTables():
     return(_query("SHOW TABLES"))
 
+def getTable(g_id):
+    t_name = tableName(g_id)
+    resp   = _query("SELECT * FROM " + t_name)
+    return resp
+
+def getView(g_id):
+    t_name = tableName(g_id)
+    qu = "SELECT p_id, p_name, alive FROM " + t_name
+    r  = _query(qu)
+    ret = []
+    for p in r:
+        ret.append({"p_id": p[0], "p_name": p[1], "alive": p[2]})
+    return ret
+
 def getLocation(g_id, p_name):
     t_name = tableName(g_id)
     resp = _query("SELECT location FROM " + t_name + " WHERE p_name='" + 
@@ -168,6 +184,24 @@ def getInfo(g_id, p_name):
         return d
     return None
 
+def getActive(g_id):
+    t_name = tableName(g_id)
+    qu     = "SELECT p_name FROM " + t_name + " WHERE alive=1"
+    resp   = _query(qu)
+    ret    = []
+    for r in resp:
+        ret.append(r[0])
+    return ret
+
+def getMacNumber(g_id):
+    t_name = tableName(g_id)
+    qu     = "SELECT p_mac FROM " + t_name
+    resp   = _query(qu)
+    ret    = []
+    for r in resp:
+        ret.append(r[0])
+    return ret
+    
 def getGameIDs():
     resp = _query("SELECT g_id FROM " + ID_TABLE)
     if resp:
@@ -275,7 +309,13 @@ if __name__ == "__main__":
     _addGameID(666)
     _removeGameID(666)
     '''
-    print getGameIDs()
+
+    '''
+    ids = getGameIDs()
+    for i in ids:
+        if i != "g_124":
+            deleteGameTable(i)
+    '''
 
     for resp in getTables():
         print resp[0]

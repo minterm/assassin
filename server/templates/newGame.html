@@ -15,10 +15,15 @@
         <select id="playerNumberDrop" class="playerInfo" onchange="playerFields(this)">
         </select>
         <ul id="infoList" class="playerInfo">
-            <form action="/new" method="POST" class="playerInfo" id="pInfoForm">
+            <form action="/new" method="POST" class="playerInfo" id="pInfoForm" onsubmit="return nameCheck()">
             </form>
         </ul>
-        <button type="button" id="btnAlert" onclick="startGame()">Beep Beep</button>
+    </div>
+
+    <br>
+    <div>
+        <a href="/"><button>Home</button></a>
+        <a href="/view"><button>View</button></a>
     </div>
 
 	<!-- ================== JavaScript ================== -->
