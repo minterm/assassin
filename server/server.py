@@ -13,7 +13,7 @@ import db_util as db
 API_SECRET = "shh"
 app        = Flask(__name__)
 
-# TODO: Check when game is finished, determine winner, provide target MAC
+# TODO: What to do when you kill target and now your target is you???
 
 ###########################################################################
 ''' Human user URLS '''
@@ -80,8 +80,7 @@ def viewGame():
 @app.route("/api/info", methods=["GET"])
 def info():
     # Takes parameters: g_id, p_name
-    # Return p_id, alive, location, target, p_name, g_id
-    # TODO: Change returns: lcation->target location, target->p_mac of target
+    # Return p_id, alive, t_loc, t_name, t_mac, p_name, g_id
     g_id   = request.args.get("g_id")
     p_name = request.args.get("p_name")
     resp   = None
@@ -242,11 +241,11 @@ def _updateTarget(g_id, p_name, target):
 
 def _createGameID():
     ids = db.getGameIDs()
-    if len(ids) > 999:
+    if ids and len(ids) > 999:
         # Too many games
         return False
     g_id = "g_" + str(random.randint(0,999))
-    while (g_id in ids):
+    while (ids and g_id in ids):
         g_id = "g_" + str(random.randint(0,999))
     return g_id
 

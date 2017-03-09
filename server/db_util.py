@@ -29,14 +29,12 @@ def createGameTable(g_id):
     col4 = "location TEXT DEFAULT NULL"
     col5 = "target VARCHAR(45) DEFAULT NULL"
     col6 = "p_mac VARCHAR(17) DEFAULT NULL"
-    col7 = "t_mac VARCHAR(17) DEFAULT NULL"
     prim = "PRIMARY KEY(p_id)"
     cmd  = "CREATE TABLE IF NOT EXISTS " + table_name + "("
     cmd += col1 + ", " + col2 + ", " + col3 + ", " + col4 + ", " + col5 + ", "
-    cmd += col6 + ", " + col7 + ", "
+    cmd += col6 + ", "
     cmd += prim + ") engine=InnoDB"
     # TODO: change primary key to p_name maybe
-    #TODO: Add getters and setters for MAC addresses
     if (_execute(cmd)):
         print table_name + " was created."
         _addGameID(table_name)
@@ -105,19 +103,6 @@ def setMAC(g_id, p_name, mac):
     print "Unable to update " + p_name + " MAC."
     return False
 
-def setTargetMAC(g_id, p_name, t_mac):
-    if len(t_mac) > 17:
-        print "Invalid target MAC address."
-        return False
-    t_name = tableName(g_id)
-    cmd  = "UPDATE " + t_name + " SET t_mac = '" + t_mac + "' WHERE "
-    cmd += "p_name = '" + p_name + "'"
-    if (_execute(cmd)):
-        print p_name + "'s target MAC is now " + t_mac + "."
-        return True
-    print "Unable to update " + p_name + " target MAC."
-    return False
-
 def deleteGameTable(g_id):
     t_name = tableName(g_id)
     cmd    = "DROP TABLE IF EXISTS " + t_name
@@ -174,14 +159,19 @@ def getStatus(g_id, p_name):
 
 def getInfo(g_id, p_name):
     # returns dictionary of info
-    t_name = tableName(g_id)
-    resp   = _query("SELECT p_id, alive, location, target FROM " + t_name + 
-                    " WHERE p_name='" + p_name + "'")
-    if resp:
-        resp = resp[0]
-        d = {"p_id": resp[0], "alive": resp[1], "location": resp[2],
-             "target": resp[3], "p_name": p_name, "g_id": t_name} 
-        return d
+    t_name   = tableName(g_id)
+    assassin = _query("SELECT p_id, alive, target FROM " + t_name + 
+                        " WHERE p_name='" + p_name + "'")
+    if assassin:
+        assassin = assassin[0]
+        target   = _query("SELECT location, p_mac FROM " + t_name + 
+                          " WHERE p_name='" + assassin[2] + "'")
+        if target:
+            target = target[0]
+            d = {"p_id": assassin[0], "alive": assassin[1], 
+                 "t_loc": target[0], "t_name": assassin[2], "t_mac": target[1], 
+                 "p_name": p_name, "g_id": t_name} 
+            return d
     return None
 
 def getActive(g_id):
@@ -309,12 +299,11 @@ if __name__ == "__main__":
     _addGameID(666)
     _removeGameID(666)
     '''
-
     '''
     ids = getGameIDs()
     for i in ids:
-        if i != "g_124":
-            deleteGameTable(i)
+        #if i != "g_124":
+        deleteGameTable(i)
     '''
 
     for resp in getTables():
