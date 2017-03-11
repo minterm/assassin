@@ -4,7 +4,9 @@
 <head>
     <title>Android Assassin</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/icon_blue.ico') }}" />
 </head>
+
 <body>
 
 <div align="center">
@@ -17,12 +19,16 @@
 
 <div align="center">
     <h1>Play!</h1>
-    <p>Connect to a current game or create a new game.</p>
+    <p>Connect to a current game or create a new game.<br>
+       <a href="/instructions">How to play</a></p>
+
     <div>
         <a href="/new"><button>New Game</button></a>
         <a href="/view"><button>View Game</button></a>
     </div>
 </div>
+
+<img src="{{ url_for('static', filename='img/Assassin_transparent_black.png') }}" alt="" width=1000 height=350>
 
 </body>
 </html>

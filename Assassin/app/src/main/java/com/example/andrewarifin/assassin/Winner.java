@@ -14,6 +14,7 @@ public class Winner extends AppCompatActivity {
     }
 
     public void backToMain(View view){
-        startActivity(new Intent(Winner.this, MainActivity.class));
+        //startActivity(new Intent(Winner.this, MainActivity.class));
+        finish();
     }
 }

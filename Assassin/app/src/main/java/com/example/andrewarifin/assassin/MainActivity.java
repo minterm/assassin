@@ -1,6 +1,10 @@
 package com.example.andrewarifin.assassin;
 
+
+import android.bluetooth.BluetoothAdapter;
+
 import android.content.pm.PackageManager;
+
 import android.support.annotation.MainThread;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,10 +19,27 @@ public class MainActivity extends AppCompatActivity {
     EditText nameInput;
     private static final int LOCATION_REQUEST = 0;
 
+    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
+
+        if (mBluetoothAdapter == null)
+        {
+            //no bluetooth available
+            startActivity(new Intent(MainActivity.this, cannotPlay.class));
+        }
+
+        if (!mBluetoothAdapter.isEnabled()) {
+            //mBluetoothAdapter.enable();
+            startActivity(new Intent(MainActivity.this, Permissions.class));
+        }
+
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -56,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             // other 'case' lines to check for other
             // permissions this app might request
         }
+
     }
 
     public void joinAGame(View view){
@@ -78,5 +100,6 @@ public class MainActivity extends AppCompatActivity {
     public void goToLose(View view){
         startActivity(new Intent(MainActivity.this, Lose.class));
     }
+    public void goToBTSettings(View view) { startActivity(new Intent(MainActivity.this, Permissions.class)); }
 }
 

@@ -8,18 +8,23 @@
 </head>
 <body>
 
-    <h1>View Game</h1>
-    <p>Enter the ID of the game to view.</p>
-    <form action="view">
-        Game ID: <input type="text" name="g_id" value="###"><br>
-        <input type="submit" value="Submit">
-    </form>
+    <h1>Game {{ g_id }}</h1>
+    <p>Player Status</p>
+
+    <div id="info">
+        <ul>
+            <li>ID | Name | Status</li>
+        {% for player in info %}
+            <li>{{ player }}</li>
+        {% endfor %}
+        </ul>
+    </div>
 
     <br>
     <div>
         <a href="/"><button>Home</button></a>
         <a href="/new"><button>New</button></a>
+        <a href="/view"><button>View</button></a>
     </div>
-
 </body>
 </html>
