@@ -62,17 +62,6 @@
         />
 
     <Button
-        android:text="Test Winning"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button7"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="51dp"
-        android:id="@+id/button8"
-        android:onClick="goToWin"/>
-
-    <Button
         android:text="Test Losing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -84,6 +73,7 @@
         />
 
     <Button
+
         android:text="Bluetooth Settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -94,4 +84,23 @@
         android:id="@+id/button12"
         android:onClick="goToBTSettings"
         />
+
+        android:text="Test Winning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button8"
+        android:onClick="goToWin"
+        android:layout_below="@+id/button7"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/nameInput"
+        android:hint="Insert Your Game Name"
+        android:layout_above="@+id/textView7"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>
