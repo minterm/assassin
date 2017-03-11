@@ -4,7 +4,9 @@
 <head>
     <title>Android Assassin</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/icon_blue.ico') }}" />
 </head>
+
 <body>
 
 <div align="center">
@@ -25,6 +27,8 @@
         <a href="/view"><button>View Game</button></a>
     </div>
 </div>
+
+<img src="{{ url_for('static', filename='img/Assassin_transparent_black.png') }}" alt="" width=1000 height=350>
 
 </body>
 </html>
