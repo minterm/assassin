@@ -4,7 +4,6 @@ html {
 }
 
 body {
-    /*background-color: #686868;*/
     color: #black;
     font-family: "Tahoma";
     text-align: center;
@@ -13,10 +12,12 @@ body {
 
 h1 {
 	color: white;
+	text-shadow: 2px 2px 4px #000000;
 }
 
 h2 {
 	color: white;
+	text-shadow: 2px 2px 4px #000000;
 }
 
 p {
@@ -27,6 +28,16 @@ p {
 p.bot {
 	border-bottom: solid;
 	border-color: white;
+}
+
+div.boxed {
+    background-color: #686868;
+    opacity: 0.9;
+    color: white;
+    padding: 20px;
+    margin: 15px;
+    box-shadow: 5px 12px 16px 0 rgba(0,0,0,.6),20px 17px 50px 0 rgba(0,0,0,0.19);
+    text-shadow: 2px 2px 4px #000000;
 }
 
 /* unvisited link */
@@ -66,7 +77,7 @@ a:active {
 }
 /* mouse over button */
 .button:hover {
-	box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+    box-shadow: 5px 12px 16px 0 rgba(0,0,0,.6),20px 17px 50px 0 rgba(0,0,0,0.19);
 	cursor: url(http://www.rw-designer.com/cursor-extern.php?id=61527),pointer;
 }
 /* button size and color varieties */
@@ -90,7 +101,9 @@ a:active {
 	flex-direction: column;
 	flex-wrap: nowrap;
 	justify-content: flex-start;
-	background-color: #0099ff;
-	padding: 5px;
+	background-color: #005b97;
+	padding: 10px;
 	margin: 5px;
+	box-shadow: 5px 12px 16px 0 rgba(0,0,0,.6),20px 17px 50px 0 rgba(0,0,0,0.19);
+    text-shadow: 2px 2px 4px #000000;
 }
