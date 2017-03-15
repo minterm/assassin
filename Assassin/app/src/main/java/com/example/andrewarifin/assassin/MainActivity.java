@@ -103,19 +103,17 @@ public class MainActivity extends AppCompatActivity {
         String gameVal = idInput.getText().toString();
         String nameVal = nameInput.getText().toString();
 
-        WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        WifiInfo info = manager.getConnectionInfo();
-        String macAddy = info.getMacAddress();
+        String macAddress = android.provider.Settings.Secure.getString(getContentResolver(), "bluetooth_address");
 
         Intent intent = new Intent(MainActivity.this, InGame.class);
         intent.putExtra("GAME ID", gameVal);
         intent.putExtra("NAME", nameVal);
-        intent.putExtra("MAC ADDRESS", macAddy);
+        intent.putExtra("MAC ADDRESS", macAddress);
 
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("p_name", nameVal);
         params.put("g_id", gameVal);
-        params.put("mac", macAddy);
+        params.put("mac", macAddress);
         params.put("loc", null);
 
         RequestQueue queue = Volley.newRequestQueue(this);
