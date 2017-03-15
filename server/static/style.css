@@ -1,13 +1,43 @@
+html {
+	background: url(/static/img/background.png) no-repeat center fixed; 
+	background-size: cover;
+}
+
 body {
-    background-color: #25383C;
-    cursor: url(http://www.rw-designer.com/cursor-extern.php?id=61527),auto;
-    color: white;
-    font-family: "Westwood LET", serif;
+    color: #black;
+    font-family: "Tahoma";
     text-align: center;
+    margin: 25px;
+}
+
+h1 {
+	color: white;
+	text-shadow: 2px 2px 4px #000000;
+}
+
+h2 {
+	color: white;
+	text-shadow: 2px 2px 4px #000000;
 }
 
 p {
-    font-size: 20px;
+    font-size: 18px;
+}
+
+/* for dividing line */
+p.bot {
+	border-bottom: solid;
+	border-color: white;
+}
+
+div.boxed {
+    background-color: #686868;
+    opacity: 0.9;
+    color: white;
+    padding: 20px;
+    margin: 15px;
+    box-shadow: 5px 12px 16px 0 rgba(0,0,0,.6),20px 17px 50px 0 rgba(0,0,0,0.19);
+    text-shadow: 2px 2px 4px #000000;
 }
 
 /* unvisited link */
@@ -28,4 +58,52 @@ a:hover {
 /* selected link */
 a:active {
     color: cyan;
+}
+
+/* fancy buttons */
+.button {
+    background-color: #0099ff; /* logo blue */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.6s; /* Safari */
+    transition-duration: 0.6s;
+}
+/* mouse over button */
+.button:hover {
+    box-shadow: 5px 12px 16px 0 rgba(0,0,0,.6),20px 17px 50px 0 rgba(0,0,0,0.19);
+	cursor: url(http://www.rw-designer.com/cursor-extern.php?id=61527),pointer;
+}
+/* button size and color varieties */
+.button1 {
+	width: 450px;
+	height: 100px;
+}
+.button2 {width: 221px;}
+.button3 {background-color: #434343;}
+
+
+/* align columns */
+#container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+}
+#container > div {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	background-color: #005b97;
+	padding: 10px;
+	margin: 5px;
+	box-shadow: 5px 12px 16px 0 rgba(0,0,0,.6),20px 17px 50px 0 rgba(0,0,0,0.19);
+    text-shadow: 2px 2px 4px #000000;
 }
