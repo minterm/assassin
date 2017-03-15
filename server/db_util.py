@@ -302,7 +302,6 @@ if __name__ == "__main__":
     '''
     ids = getGameIDs()
     for i in ids:
-        #if i != "g_124":
         deleteGameTable(i)
     '''
 

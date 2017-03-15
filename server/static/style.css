@@ -32,6 +32,7 @@ p.bot {
 
 div.boxed {
     background-color: #686868;
+    text-align: left;
     opacity: 0.9;
     color: white;
     padding: 20px;

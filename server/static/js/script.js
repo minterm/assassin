@@ -87,17 +87,11 @@ var nameCheck = function() {
     return true;
 };
 
+var download = function() {
+    if (conflict) {
+        alert("Please use unique names.");
+        return false;
+    }
+    return true;
+};
 
-$(function() {
-    $("#btnAlert").click(function() {
-        $.ajax({
-            url: "/alert",
-            data: $("form").serialize(),
-            type: "POST",
-            success: otherFunctionnnnnnnn,
-            error: function(error) {
-                console.log(error);
-            }
-        });
-    });
-});

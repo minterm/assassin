@@ -219,6 +219,7 @@ def _assignTargets(players):
     # return a dictionary of {assassin: target}
     if len(players) <= 1:
         return None
+    '''
     assassins = players # DON'T MODIFY assassins
     targets   = list(players)
     aT        = {}
@@ -233,6 +234,17 @@ def _assignTargets(players):
     for assassin, target in zip(assassins, targets):
         aT[assassin] = target
     return aT
+    '''
+    assassins = list(players)
+    r         = random.SystemRandom()
+    r.shuffle(assassins)
+    aT        = {}
+    n         = len(assassins) - 1
+    for i in range(0, n):
+        aT[assassins[i]] = assassins[i+1]
+    aT[assassins[n]] = assassins[0]
+    return aT
+
 
 def _updateTarget(g_id, p_name, target):
     newTarget = db.getTarget(g_id, target)
