@@ -69,22 +69,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:onClick="goToLose"
-        />
+        /><![CDATA[
 
-    <Button
-
-        android:text="Bluetooth Settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView7"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="21dp"
-        android:id="@+id/button12"
-        android:onClick="goToBTSettings"
-        />
-
-        android:text="Test Winning"
+    android:text="Test Winning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button8"
@@ -92,6 +79,8 @@
         android:layout_below="@+id/button7"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    ]]>
 
     <EditText
         android:layout_width="match_parent"
@@ -101,5 +90,26 @@
         android:layout_above="@+id/textView7"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+
+        android:text="Bluetooth Settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button12"
+        android:onClick="goToBTSettings"
+        android:layout_alignBaseline="@+id/button7"
+        android:layout_alignBottom="@+id/button7"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Insert your macAddress"
+        android:ems="10"
+        android:layout_above="@+id/nameInput"
+        android:layout_alignParentStart="true"
+        android:id="@+id/macAddy" />
 
 </RelativeLayout>
