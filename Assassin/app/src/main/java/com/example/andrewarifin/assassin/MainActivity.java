@@ -3,8 +3,11 @@ package com.example.andrewarifin.assassin;
 
 import android.bluetooth.BluetoothAdapter;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.support.annotation.MainThread;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +17,23 @@ import android.view.View;
 import android.content.Intent;
 import android.widget.EditText;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
     EditText idInput;
     EditText nameInput;
     private static final int LOCATION_REQUEST = 0;
+    String apiURL = "http://a8b934bf.ngrok.io/api/join";
 
     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -29,16 +45,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        if (mBluetoothAdapter == null)
-        {
-            //no bluetooth available
-            startActivity(new Intent(MainActivity.this, cannotPlay.class));
-        }
-
-        if (!mBluetoothAdapter.isEnabled()) {
-            //mBluetoothAdapter.enable();
-            startActivity(new Intent(MainActivity.this, Permissions.class));
-        }
+//        if (mBluetoothAdapter == null)
+//        {
+//            //no bluetooth available
+//            startActivity(new Intent(MainActivity.this, cannotPlay.class));
+//        }
+//
+//        if (!mBluetoothAdapter.isEnabled()) {
+//            //mBluetoothAdapter.enable();
+//            startActivity(new Intent(MainActivity.this, Permissions.class));
+//        }
 
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -87,10 +103,46 @@ public class MainActivity extends AppCompatActivity {
         String gameVal = idInput.getText().toString();
         String nameVal = nameInput.getText().toString();
 
+        WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = manager.getConnectionInfo();
+        String macAddy = info.getMacAddress();
+
         Intent intent = new Intent(MainActivity.this, InGame.class);
         intent.putExtra("GAME ID", gameVal);
         intent.putExtra("NAME", nameVal);
+        intent.putExtra("MAC ADDRESS", macAddy);
 
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("p_name", nameVal);
+        params.put("g_id", gameVal);
+        params.put("mac", macAddy);
+        params.put("loc", null);
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, apiURL, new JSONObject(params), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i("JOIN", response.toString());
+//                        try {
+//                            targetInfo.setText(response.getString("userId"));
+//                        }
+//                        catch (JSONException e) {
+//                            Log.e("JSON Err", e.toString());
+//                        }
+//                        Log.v("Test", response.toString());
+                    }
+
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //TO DO Auto generated method stub
+                        Log.e("Volley error", error.toString());
+                    }
+                });
+
+        queue.add(jsObjRequest);
         startActivity(intent);
     }
 
