@@ -7,7 +7,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -22,6 +25,9 @@ import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.util.HashMap;
 
 public class MyReceiver extends BroadcastReceiver {
     public MyReceiver() {
@@ -29,31 +35,64 @@ public class MyReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
         Log.v("alarm", "alarm received");
         Bundle b = intent.getExtras();
+        String gameId = b.getString("g_id");
+        String name = b.getString("p_name");
+        Log.i("extras", gameId + name);
         try {
             if (b != null) {
-                Log.v("stuff", b.toString());
                 Location loc = (Location)b.get(android.location.LocationManager.KEY_LOCATION_CHANGED);
 
                 if (loc != null) {
-                    Log.i("location", loc.toString());
-                    Toast toast = Toast.makeText(context, loc.toString(), Toast.LENGTH_SHORT);
-                    toast.show();
-                    RequestQueue queue = Volley.newRequestQueue(context);
-                    String url = "https://jsonplaceholder.typicode.com/posts/";
+//                    Log.i("location", loc.toString());
+//                    Toast toast = Toast.makeText(context, loc.toString(), Toast.LENGTH_SHORT);
+//                    toast.show();
+                    String lat = Double.toString(loc.getLatitude());
+                    String lon = Double.toString(loc.getLongitude());
+                    String locString = lat + "," + lon;
 
-                    JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                            (Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+                    Log.i("LOCATION", locString);
+
+                    HashMap<String, String> params = new HashMap<String, String>();
+                    params.put("p_name", name);
+                    params.put("g_id", gameId);
+                    params.put("loc", locString);
+
+                    RequestQueue queue = Volley.newRequestQueue(context);
+                    String url = "http://a8b934bf.ngrok.io/";
+
+                    // POSTing player location
+                    JsonObjectRequest postLocation = new JsonObjectRequest
+                            (Request.Method.POST, url + "api/gps", new JSONObject(params), new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
-//                                    Log.i("res", String.valueOf(response));
+                                    Log.i("res", String.valueOf(response));
+                                }
+
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    //TO DO Auto generated method stub
+                                    Log.e("Volley POST error", error.toString());
+                                }
+                            });
+
+                    //GETing target location
+                    JsonObjectRequest getLocation = new JsonObjectRequest
+                            (Request.Method.GET, url + "api/info?g_id=" + gameId + "&p_name=" + name, null, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
                                     try {
-                                        Log.i("res", String.valueOf(response.getString("id")));
-                                    } catch (JSONException e){
-                                        Log.e("err", "json err" + e);
+//                                        Log.i("GET response", response.toString());
+                                        String locString = response.getString("t_loc");
+                                        String locationURL = "<a href='http://maps.google.com/?q=" + locString + "'> Location </a>";
+                                        InGame.getInstance().updateLocationText(locationURL);
                                     }
-//                        Log.v("Test", response.toString());
+                                    catch (JSONException e) {
+                                        Log.e("JSON GET Err", e.toString());
+                                    }
                                 }
 
                             }, new Response.ErrorListener() {
@@ -64,7 +103,8 @@ public class MyReceiver extends BroadcastReceiver {
                                 }
                             });
 
-                    queue.add(jsObjRequest);
+                    queue.add(postLocation);
+                    queue.add(getLocation);
                 }
             }
         }
@@ -74,45 +114,4 @@ public class MyReceiver extends BroadcastReceiver {
         }
     }
 
-    public class NetworkAccess extends AsyncTask<Context, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Log.i("async", "pre-executing lol");
-        }
-
-        @Override
-        protected Void doInBackground(Context... params) {
-            RequestQueue queue = Volley.newRequestQueue(params[0]);
-            String url = "https://jsonplaceholder.typicode.com/posts/";
-
-            JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.i("res", String.valueOf(response));
-//                        Log.v("Test", response.toString());
-                        }
-
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            //TO DO Auto generated method stub
-                            Log.e("Volley error", error.toString());
-                        }
-                    });
-
-            queue.add(jsObjRequest);
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            Log.i("request", "done");
-        }
-
-        protected void onProgressUpdate(Void... values) {}
-
-    }
 }
