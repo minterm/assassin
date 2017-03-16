@@ -13,8 +13,6 @@ import db_util as db
 API_SECRET = "shh"
 app        = Flask(__name__)
 
-# TODO: What to do when you kill target and now your target is you???
-
 ###########################################################################
 ''' Human user URLS '''
 ###########################################################################
@@ -84,18 +82,6 @@ def info():
     g_id   = request.args.get("g_id")
     p_name = request.args.get("p_name")
     resp   = None
-
-    # test behavior without database
-    '''
-    resp = {}
-    resp['alive'] = 1
-    resp['g_id']  = g_id
-    resp['location'] = "right here"
-    resp['p_id'] = 1
-    resp['p_name'] = p_name
-    resp['target'] = p_name + "'s target"
-    return jsonify(resp)
-    '''
 
     # actual behavior
     if g_id is None or p_name is None:
@@ -219,22 +205,6 @@ def _assignTargets(players):
     # return a dictionary of {assassin: target}
     if len(players) <= 1:
         return None
-    '''
-    assassins = players # DON'T MODIFY assassins
-    targets   = list(players)
-    aT        = {}
-    r         = random.SystemRandom()
-    conflict  = True
-    while conflict:
-        conflict = False
-        r.shuffle(targets)
-        for assassin, target in zip(assassins, targets):
-            if assassin == target:
-                conflict = True
-    for assassin, target in zip(assassins, targets):
-        aT[assassin] = target
-    return aT
-    '''
     assassins = list(players)
     r         = random.SystemRandom()
     r.shuffle(assassins)
