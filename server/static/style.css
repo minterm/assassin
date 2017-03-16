@@ -4,19 +4,10 @@ html {
 }
 
 body {
-    color: #black;
+    color: white;
     font-family: "Tahoma";
     text-align: center;
     margin: 25px;
-}
-
-h1 {
-	color: white;
-	text-shadow: 2px 2px 4px #000000;
-}
-
-h2 {
-	color: white;
 	text-shadow: 2px 2px 4px #000000;
 }
 
@@ -34,11 +25,9 @@ div.boxed {
     background-color: #686868;
     text-align: left;
     opacity: 0.9;
-    color: white;
     padding: 20px;
     margin: 15px;
     box-shadow: 5px 12px 16px 0 rgba(0,0,0,.6),20px 17px 50px 0 rgba(0,0,0,0.19);
-    text-shadow: 2px 2px 4px #000000;
 }
 
 /* unvisited link */
@@ -102,7 +91,7 @@ a:active {
 	flex-direction: column;
 	flex-wrap: nowrap;
 	justify-content: flex-start;
-	background-color: #005b97;
+	background-color: #0099ff;
 	padding: 10px;
 	margin: 5px;
 	box-shadow: 5px 12px 16px 0 rgba(0,0,0,.6),20px 17px 50px 0 rgba(0,0,0,0.19);
