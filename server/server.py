@@ -183,6 +183,7 @@ def attackTarget():
         resp             = jsonify({"success": "false", "error": e})
         resp.status_code = 400
         return resp
+    arg = db.getStatus(g_id,target)
     if int(db.getStatus(g_id, target)) == 0:
         resp = jsonify({"success": "false", "error":
                         "target already dead"})

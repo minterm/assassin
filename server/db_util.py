@@ -82,7 +82,7 @@ def setStatus(g_id, p_name, status):
     if status != 0:
         status = 1
     t_name = tableName(g_id)
-    cmd  = "UPDATE " + t_name + " SET alive = '" + status + "' WHERE "
+    cmd  = "UPDATE " + t_name + " SET alive = " + str(status) + " WHERE "
     cmd += "p_name = '" + p_name + "'"
     if (_execute(cmd)):
         print p_name + " alive = " + str(status) + "."
