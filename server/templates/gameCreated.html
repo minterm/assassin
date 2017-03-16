@@ -7,19 +7,22 @@
     <link rel="icon" href="{{ url_for('static', filename='img/icon_blue.ico') }}" />
 </head>
 <body>
-    {% if success %}
+    <img src="{{ url_for('static', filename='img/logo_icon.png') }}" alt="" width=394 height=350> <br>
+	{% if success %}
     <h1>Game {{ g_id }}</h1>
-    <p>Open the mobile app and join this game using the ID: {{ g_id }}</p>
+    <p>Open the mobile app and join your game using the above Game ID.<br>May luck favor you, and may the best Assassin win!</p>
     {% else %}
     <h1>Failed to Create Game</h1>
     <p>{{ error }}</p>
     {% endif %}
 
-    <br>
+    <br><br>
     <div>
-        <a href="/"><button>Home</button></a>
-        <a href="/new"><button>New</button></a>
-        <a href="/view"><button>View</button></a>
+        <a href="/home"><button class="button button2">Home</button></a>
+		<a href="/new"><button class="button button2">Start New Game</button></a>
     </div>
+	<div align="center">
+		<a href="/view"><button class="button button3">View Game</button></a>
+	</div>
 </body>
 </html>
