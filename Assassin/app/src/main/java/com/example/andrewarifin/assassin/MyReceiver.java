@@ -34,13 +34,11 @@ public class MyReceiver extends BroadcastReceiver {
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
-
+    public void onReceive(final Context context, Intent intent) {
         Log.v("alarm", "alarm received");
         Bundle b = intent.getExtras();
         String gameId = b.getString("g_id");
         String name = b.getString("p_name");
-        Log.i("extras", gameId + name);
         try {
             if (b != null) {
                 Location loc = (Location)b.get(android.location.LocationManager.KEY_LOCATION_CHANGED);
@@ -53,15 +51,13 @@ public class MyReceiver extends BroadcastReceiver {
                     String lon = Double.toString(loc.getLongitude());
                     String locString = lat + "," + lon;
 
-                    Log.i("LOCATION", locString);
-
                     HashMap<String, String> params = new HashMap<String, String>();
                     params.put("p_name", name);
                     params.put("g_id", gameId);
                     params.put("loc", locString);
 
                     RequestQueue queue = Volley.newRequestQueue(context);
-                    String url = "http://a8b934bf.ngrok.io/";
+                    String url = "http://minterm.pythonanywhere.com/";
 
                     // POSTing player location
                     JsonObjectRequest postLocation = new JsonObjectRequest
@@ -89,6 +85,36 @@ public class MyReceiver extends BroadcastReceiver {
                                         String locString = response.getString("t_loc");
                                         String locationURL = "<a href='http://maps.google.com/?q=" + locString + "'> Location </a>";
                                         InGame.getInstance().updateLocationText(locationURL);
+                                        InGame.getInstance().updateStatusText(response.getInt("alive"));
+                                        InGame.getInstance().updateTargetText(response.getString("t_mac"), response.getString("t_name"));
+                                    }
+                                    catch (JSONException e) {
+                                        Log.e("JSON GET Err", e.toString());
+                                    }
+                                }
+
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    //TO DO Auto generated method stub
+                                    Log.e("Volley error", error.toString());
+                                }
+                            });
+
+                    JsonObjectRequest getStatus = new JsonObjectRequest
+                            (Request.Method.GET, url + "api/gameplay?g_id=" + gameId, null, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+//                                        Log.i("GET response", response.toString());
+                                        Integer status = response.getInt("status");
+                                        if(status == 2) {
+                                            Intent winIntent = new Intent();
+                                            winIntent.putExtra("winner", response.getString("winner"));
+                                            winIntent.setClass(context, Winner.class);
+                                            winIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            context.startActivity(winIntent);
+                                        }
                                     }
                                     catch (JSONException e) {
                                         Log.e("JSON GET Err", e.toString());
@@ -105,6 +131,7 @@ public class MyReceiver extends BroadcastReceiver {
 
                     queue.add(postLocation);
                     queue.add(getLocation);
+                    queue.add(getStatus);
                 }
             }
         }
