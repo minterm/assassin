@@ -3,6 +3,7 @@ package com.example.andrewarifin.assassin;
 
 import android.bluetooth.BluetoothAdapter;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     EditText idInput;
     EditText nameInput;
     private static final int LOCATION_REQUEST = 0;
-    String apiURL = "http://a8b934bf.ngrok.io/api/join";
+    String apiURL = "http://minterm.pythonanywhere.com/api/join";
 
     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -115,6 +116,11 @@ public class MainActivity extends AppCompatActivity {
         params.put("g_id", gameVal);
         params.put("mac", macAddress);
         params.put("loc", null);
+
+        PackageManager pm  = this.getPackageManager();
+        ComponentName componentName = new ComponentName(this, MyReceiver.class);
+        pm.setComponentEnabledSetting(componentName,PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
 
         RequestQueue queue = Volley.newRequestQueue(this);
 

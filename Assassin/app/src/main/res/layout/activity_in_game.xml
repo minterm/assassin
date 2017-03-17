@@ -50,7 +50,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="assassinate"/>
 
     <Button
         android:text="quit"
@@ -80,22 +81,43 @@
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/locationName"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textSize="24sp"
-        android:fontFamily="sans-serif"
-        android:layout_alignTop="@+id/textView4"
-        android:layout_toEndOf="@+id/textView4" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/targetName"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textSize="24sp"
         android:fontFamily="sans-serif"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/textView4" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/locationName"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif"
+        android:layout_alignTop="@+id/textView4"
+        android:layout_toEndOf="@+id/textView4"
+        android:layout_marginStart="10dp" />
+
+    <TextView
+        android:text="Status:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/status"
+        android:layout_alignTop="@+id/statusText"
+        android:layout_alignEnd="@+id/textView3" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/statusText"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/locationName"
+        android:layout_alignStart="@+id/locationName" />
 
 </RelativeLayout>
